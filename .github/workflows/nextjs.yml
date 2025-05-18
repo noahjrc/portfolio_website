@@ -2,13 +2,14 @@ name: 📦 Build & Deploy Next.js to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
-  contents: read     # needed by checkout
-  pages: write       # for deploy-pages
-  id-token: write    # for pages OIDC
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -20,15 +21,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build (static export)
         run: npm run build
-        # because output:"export" in next.config.ts, `next build` already emits your `out/` folder
+        # your next.config.ts → output: "export" will generate `out/`
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -41,5 +42,3 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-        with:
-          # nothing else needed—GITHUB_TOKEN is automatic
