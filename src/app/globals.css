@@ -1,0 +1,627 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background-color: #36454F;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.page-container {
+  min-height: 100vh;
+  background-color: #36454F;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────── */
+.header {
+  height: 9vh;
+  background-color: #F0EAD6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  position: relative;
+}
+
+.header.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: visable;
+}
+
+.nav_container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-item {
+  color: #36454f;
+  font-family: "Chivo Mono", monospace;
+  text-decoration: none;
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  transition: opacity 0.3s ease;
+  padding: 0.5rem;
+}
+.nav-item:hover { opacity: 0.8; }
+
+.social_icons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  position: relative;
+  height: 100%;
+}
+
+.icon-link,
+.contact-dropdown-container > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  height: 100%;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: #36454F;
+  transition: all 0.3s ease;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.icon-link:hover .icon {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+.header_text {
+  color: #36454f;
+  font-family: "Chivo Mono", monospace;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.header_text:hover { opacity: 0.8; }
+
+.FaGithub,
+.FaLinkedin,
+.FaEnvelope {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.contact-dropdown-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}
+
+.contact-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #F0EAD6;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  min-width: 220px;
+  border: 1px solid rgba(54, 69, 79, 0.1);
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  color: #36454F;
+  font-family: "Chivo Mono", monospace;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
+  border-radius: 0.25rem;
+}
+.contact-item:hover { background-color: #e0dac6; }
+.contact-item svg { margin-right: 0.75rem; flex-shrink: 0; }
+
+.contact-copy-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #36454F;
+  color: #F0EAD6;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-family: "Chivo Mono", monospace;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+.contact-copy-notification.show { opacity: 1; }
+
+@media (max-width: 640px) {
+  .header {
+    padding: 0.5rem 1rem;
+    flex-wrap: wrap;
+    height: auto;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .nav_container {
+    position: static;
+    transform: none;
+    order: 3;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .nav { justify-content: center; gap: 0.5rem; }
+  .header_text { margin-right: auto; }
+  .social_icons { height: auto; }
+  .contact-dropdown { right: auto; left: 0; }
+}
+
+/* ─── About Me ───────────────────────────────────────────────────────────── */
+.about-me {
+  background-color: #36454F;
+}
+
+.content-wrapper {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding: 8rem 2rem 4rem;
+}
+
+.profile-image {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.profile-photo {
+  width: 260px;
+  height: 260px;
+  border-radius: 9999px;
+  object-fit: cover;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 2rem ;
+  width: 100%;
+  max-width: none;
+}
+
+.title-container { margin-left: -1rem; }
+
+.about-title {
+  font-family: "Chivo Mono", monospace;
+  font-size: clamp(2rem, 6vw, 4rem);
+  margin: 0;
+  color: #F0EAD6;
+}
+
+.about-text {
+  font-family: "Chivo Mono", monospace;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  line-height: 1.7;
+  color: #F0EAD6;
+}
+
+/* ─── Album Carousel ────────────────────────────────────────────────────── */
+.carousel-container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0rem;
+  text-align: center;
+}
+
+.album-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.album-cover-container {
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.album-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.album-cover:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-button {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;                  /* make the < and > big */
+  color: #F0EAD6;                   /* arrow color */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.nav-button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+/* ─── Album Overlay on Hover ───────────────────────────────────────────── */
+.album-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #F0EAD6;
+  font-family: "Chivo Mono", monospace;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 1rem;
+}
+
+.album-cover-container:hover .album-overlay {
+  opacity: 1;
+}
+
+.overlay-title {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+}
+
+.overlay-artist {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  opacity: 0.9;
+}
+
+/* ─── Grid Container ───────────────────────────────────────────────────── */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem;
+  width: 100%;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.centered-card-container {
+  display: flex;
+  justify-content: center;
+  width: calc(50% - 2rem);
+  margin-top: 4rem;
+}
+
+.centered-card {
+  width: calc(50% - 2rem);
+  max-width: none;
+}
+/* ─── Flip Card Styles ────────────────────────────────────────────────── */
+.flip-card {
+  width: 100%;
+  height: 400px;
+  perspective: 1000px;
+  border-radius: 1rem;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+  border-radius: inherit;
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: inherit;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+
+.image-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* Image styles for ALL flip cards */
+.flip-card .image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: inherit;
+}
+
+/* Special cases for experience section logos */
+.experience .flip-card:nth-child(1) .image-wrapper img,
+.experience .flip-card:nth-child(2) .image-wrapper img,
+.experience .flip-card:nth-child(3) .image-wrapper img {
+  object-fit: contain;
+  padding: 1rem;
+  background-color: white;
+}
+
+/* Project section images */
+.projects .flip-card .image-wrapper img {
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  color: #F0EAD6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+  font-family: "Chivo Mono", monospace;
+  text-align: center;
+}
+
+.image-wrapper:hover .overlay {
+  opacity: 1;
+}
+
+.overlay h3 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  line-height: 1.2;
+}
+
+.overlay .dates {
+  margin: 0;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  opacity: 0.9;
+}
+
+.flip-card-back {
+  background-color: #F0EAD6;
+  color: #36454F;
+  font-family: "Chivo Mono", monospace;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align text to the left for readability */
+  justify-content: flex-start;
+  text-align: left;
+  gap: 1rem;
+  transform: rotateY(180deg);
+  border-radius: 1rem;
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem); /* Optional: responsive text size */
+}
+
+.flip-card-back > * {
+  width: 100%;
+  max-width: 100%; /* Remove the 300px restriction */
+  margin: 0;
+}
+
+.flip-card-back h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.flip-card-back ul {
+  list-style: disc inside;
+  padding-left: 1rem;
+  margin: 0;
+}
+
+.flip-card-back li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* ─── Section Styles ──────────────────────────────────────────────────── */
+.experience,
+.projects {
+  background-color: #36454F;
+}
+
+/* Reduced spacing between sections */
+.experience .content-wrapper {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  padding-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.projects .content-wrapper {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  padding-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Additional spacing control */
+.experience {
+  padding-bottom: 2rem;
+}
+
+.section-title {
+  font-family: "Chivo Mono", monospace;
+  font-size: clamp(2rem, 6vw, 4rem);
+  color: #F0EAD6;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ─── Resume Section ──────────────────────────────────────────────────── */
+.resume {
+  background-color: #36454F;
+  padding-bottom: 4rem;
+}
+
+.resume .content-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  padding-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.resume-embed {
+  width: 100%;
+  height: 800px;
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.download-btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: #F0EAD6;
+  color: #36454F;
+  font-family: "Chivo Mono", monospace;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  align-self: center;
+}
+
+.download-btn:hover {
+  background-color: #e0dac6;
+  transform: translateY(-2px);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    padding: 2rem 1rem 4rem;
+    gap: 2rem;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .centered-card-container {
+    margin-top: 0;
+  }
+
+  .centered-card {
+    max-width: 100%;
+  }
+
+  .title-container {
+    margin-left: 0;
+  }
+
+  .experience .content-wrapper,
+  .projects .content-wrapper {
+    padding-top: 4rem;
+  }
+  
+  .experience {
+    padding-bottom: 1rem;
+  }
+}
