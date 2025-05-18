@@ -625,3 +625,48 @@ html {
     padding-bottom: 1rem;
   }
 }
+
+@media (max-width: 768px) {
+  .album-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nav-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+  }
+
+  .profile-photo {
+    width: 180px;
+    height: 180px;
+  }
+
+  .flip-card {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .album-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-photo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .nav-button {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.25rem;
+  }
+
+  .nav-item,
+  .contact-item {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+}
