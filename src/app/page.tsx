@@ -311,7 +311,7 @@ export default function Home() {
             This browser does not support PDFs. Please download the PDF to view it.
           </iframe>
           <a 
-            href="/SW_Resume.pdf" 
+            href="/SW_Resume_Noah_Colbourne.pdf" 
             download="Noah_Colbourne_Resume.pdf" 
             className="download-btn"
           >
