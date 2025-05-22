@@ -304,7 +304,7 @@ export default function Home() {
         <div className="content-wrapper">
           <h2 className="section-title">Résumé</h2>
           <iframe 
-            src="/SW_Resume.pdf" 
+            src="/SW_Resume_Noah_Colbourne.pdf" 
             className="resume-embed"
             title="Noah Colbourne's Resume"
           >

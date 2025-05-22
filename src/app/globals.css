@@ -179,26 +179,6 @@ html {
 }
 .contact-copy-notification.show { opacity: 1; }
 
-@media (max-width: 640px) {
-  .header {
-    padding: 0.5rem 1rem;
-    flex-wrap: wrap;
-    height: auto;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-  .nav_container {
-    position: static;
-    transform: none;
-    order: 3;
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-  .nav { justify-content: center; gap: 0.5rem; }
-  .header_text { margin-right: auto; }
-  .social_icons { height: auto; }
-  .contact-dropdown { right: auto; left: 0; }
-}
 
 /* ─── About Me ───────────────────────────────────────────────────────────── */
 .about-me {
@@ -593,6 +573,8 @@ html {
 }
 
 /* ─── Responsive ──────────────────────────────────────────────────────── */
+
+/* ≤ 768px */
 @media (max-width: 768px) {
   .content-wrapper {
     flex-direction: column;
@@ -620,13 +602,11 @@ html {
   .projects .content-wrapper {
     padding-top: 4rem;
   }
-  
+
   .experience {
     padding-bottom: 1rem;
   }
-}
 
-@media (max-width: 768px) {
   .album-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -645,8 +625,85 @@ html {
   .flip-card {
     padding: 0 1rem;
   }
+
+  .about-me .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 1rem 2rem;
+    gap: 2rem;
+  }
+
+  .about-content {
+    padding: 0 1rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .about-text {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
 }
 
+/* ≤ 640px */
+@media (max-width: 640px) {
+  .header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    height: auto;
+    flex-wrap: wrap;
+  }
+
+  .header_text {
+    margin: 0;
+    font-size: 1.5rem;
+    order: 1;
+  }
+
+  .social_icons {
+    order: 2;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+  }
+
+  .nav_container {
+    position: static;
+    transform: none;
+    order: 3;
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+    z-index: 10;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .contact-dropdown-container {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .contact-dropdown {
+    left: 50% !important;
+    transform: translateX(-50%);
+    top: calc(100% + 8px);
+    z-index: 999;
+  }
+}
+
+/* ≤ 480px */
 @media (max-width: 480px) {
   .album-grid {
     grid-template-columns: 1fr;
