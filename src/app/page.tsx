@@ -178,7 +178,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flip-card-back">
-                  <h3><strong>DCI Digitalization Engineering Student</strong></h3>
+                  <h3><strong>Digitalization Engineering Student</strong></h3>
                   <ul>
                     <li>Automated the digitization of 1,600+ Mud Report and Bottomhole Assembly PDF/Excel files using Python, enhancing data accessibility and enabling streamlined dashboard development</li>
                     <li>Reworked a MATLAB-based downhole vibration model in Python, enabling large-scale training and analysis in Databricks using structured Bottomhole Assembly datasets</li>
@@ -284,7 +284,7 @@ export default function Home() {
                   <img src="/default.jpg" alt="Music Rating App" className="experience-image" />
                   <div className="overlay">
                     <h3>Music Rating App (Capstone)</h3>
-                    <p className="dates">Dart, Flutter, MusicBrainz, AtProtocol</p>
+                    <p className="dates">Dart, Flutter, MusicBrainz, Firebase</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
