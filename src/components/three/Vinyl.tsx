@@ -30,7 +30,7 @@ const PER_ROW = 10;
 const GAP = 0.235;
 const SLEEVE = 0.22;
 const ROW0 = 1.45;
-const ROW_H = 0.72;
+const ROW_H = 0.44;
 const SHELF_X = 3.05;
 const ROWS = Math.ceil(albums.length / PER_ROW);
 
@@ -38,7 +38,9 @@ function sleevePose(i: number) {
   const row = Math.floor(i / PER_ROW);
   const col = i % PER_ROW;
   const inRow = Math.min(PER_ROW, albums.length - row * PER_ROW);
-  return new THREE.Vector3(SHELF_X + (col - (inRow - 1) / 2) * GAP, ROW0 + row * ROW_H + 0.02 + SLEEVE / 2, WALL_Z + 0.07);
+  // Reads like a page: the first records sit on the top shelf, left to right.
+  const shelf = ROWS - 1 - row;
+  return new THREE.Vector3(SHELF_X + (col - (inRow - 1) / 2) * GAP, ROW0 + shelf * ROW_H + 0.02 + SLEEVE / 2, WALL_Z + 0.07);
 }
 
 const sleeveEdge = new THREE.MeshStandardMaterial({ color: '#141414', roughness: 0.8 });

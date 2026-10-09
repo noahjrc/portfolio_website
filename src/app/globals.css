@@ -90,7 +90,8 @@ button {
     linear-gradient(rgba(20, 15, 10, 0), rgba(20, 15, 10, 0.5));
 }
 
-.topbar,
+/* The top bar spans the screen; only its contents take clicks, so the room behind stays clickable. */
+.topbar > *,
 .back-link,
 .intro,
 .panel,
@@ -213,6 +214,12 @@ kbd {
   border: 1px solid var(--cream-faint);
   border-radius: 4px;
   color: var(--cream-dim);
+}
+/* Keyboard hints mean nothing on phones and tablets. */
+@media (hover: none) and (pointer: coarse) {
+  kbd {
+    display: none;
+  }
 }
 
 /* ─── Shared type ────────────────────────────────────────────────────── */
@@ -518,6 +525,15 @@ kbd {
   background: var(--cream);
 }
 
+/* Space reserved in the card; the YouTube player (owned by lib/player) is laid over it. */
+.yt-slot {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
 .np-credit {
   grid-column: 1 / -1;
   font-size: 0.68rem;
@@ -618,6 +634,39 @@ kbd {
   border: 0;
   border-radius: 8px;
   background: #fff;
+}
+.resume-mobile {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  color: var(--cream-dim);
+}
+.resume-mobile p {
+  margin: 0;
+}
+
+/* Phones only: eject the game from the TV close-up. */
+.eject-button {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 1px solid var(--cream-faint);
+  border-radius: 999px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cream);
+  pointer-events: auto;
+  animation: fade-in 0.4s var(--ease) both;
 }
 
 /* ─── Hotspots (rendered inside the 3D scene) ────────────────────────── */
@@ -807,8 +856,9 @@ kbd {
     gap: 14px;
     padding: 18px 20px;
   }
+  /* All five sections fit across a phone; the social links live in About instead. */
   .nav {
-    gap: 18px;
+    gap: 14px;
     width: 100%;
     overflow-x: auto;
     padding-bottom: 4px;
@@ -819,6 +869,31 @@ kbd {
   }
   .nav-link {
     white-space: nowrap;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+  .nav-divider,
+  .icon-link {
+    display: none;
+  }
+  .intro-title {
+    font-size: 2.4rem;
+  }
+  .intro-text {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+  .eject-button {
+    display: inline-flex;
+  }
+  .resume-frame {
+    display: none;
+  }
+  .resume-mobile {
+    display: flex;
+  }
+  .modal {
+    height: auto;
   }
   .back-link {
     top: 116px;

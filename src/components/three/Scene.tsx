@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useLayoutEffect } from 'react';
+import { Suspense, useLayoutEffect, useMemo } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { Environment, Lightformer } from '@react-three/drei';
 import { Bloom, EffectComposer, N8AO, ToneMapping, Vignette } from '@react-three/postprocessing';
@@ -82,12 +82,22 @@ function Ready() {
   return null;
 }
 
+/**
+ * Phones and tablets get a lighter render: no ambient occlusion (the heaviest
+ * effect), no multisampling and a lower pixel-density cap, to keep the frame
+ * rate up and the battery cool.
+ */
+function isTouchDevice() {
+  return typeof window !== 'undefined' && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+}
+
 export default function Scene() {
+  const lite = useMemo(isTouchDevice, []);
   return (
     <Canvas
       shadows
       flat
-      dpr={[1, 1.75]}
+      dpr={lite ? [1, 1.5] : [1, 1.75]}
       camera={{ fov: 40, near: 0.1, far: 80, position: [10, 12, 22] }}
       onPointerMissed={() => setState({ hovered: null })}
     >
@@ -115,12 +125,14 @@ export default function Scene() {
         <Ready />
       </Suspense>
       <CameraRig />
-      <EffectComposer multisampling={4}>
-        <N8AO aoRadius={0.5} distanceFalloff={0.5} intensity={2.2} quality="medium" halfRes />
-        {/* Only genuinely bright things glow (lamp shades, screens); paper and walls don't. */}
-        <Bloom mipmapBlur luminanceThreshold={1.4} intensity={0.6} />
-        <ToneMapping mode={ToneMappingMode.AGX} />
-        <Vignette offset={0.3} darkness={0.45} />
+      <EffectComposer multisampling={lite ? 0 : 4}>
+        {[
+          ...(lite ? [] : [<N8AO key="ao" aoRadius={0.5} distanceFalloff={0.5} intensity={2.2} quality="medium" halfRes />]),
+          // Only genuinely bright things glow (lamp shades, screens); paper and walls don't.
+          <Bloom key="bloom" mipmapBlur luminanceThreshold={1.4} intensity={0.6} />,
+          <ToneMapping key="tone" mode={ToneMappingMode.AGX} />,
+          <Vignette key="vignette" offset={0.3} darkness={0.45} />,
+        ]}
       </EffectComposer>
     </Canvas>
   );

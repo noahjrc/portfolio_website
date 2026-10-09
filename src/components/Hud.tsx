@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import {
   FiArrowLeft,
-  FiChevronLeft,
   FiChevronRight,
   FiDownload,
   FiGithub,
@@ -19,7 +18,7 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { albums, experience, profile, projects } from '@/data/content';
-import { ejectRecord, loadSavedVolume, playAlbum, setVolume, shuffleAlbum, togglePlayback } from '@/lib/player';
+import { canSetVolume, ejectRecord, loadSavedVolume, placeYoutube, playAlbum, setVolume, shuffleAlbum, togglePlayback } from '@/lib/player';
 import { getState, setState, setView, turnCrtPage, useStore, type PlayerStatus, type Zone } from '@/lib/store';
 
 const NAV: { view: Zone; label: string }[] = [
@@ -174,48 +173,43 @@ function ExperiencePanel() {
   const disc = useStore((s) => s.disc);
   const current = disc !== null ? experience[disc] : null;
   return (
-    <section className="sr-only" aria-label="Experience">
-      {experience.map((e, i) => (
-        <button key={e.company} type="button" aria-pressed={disc === i} onClick={() => setState({ disc: i })}>
-          Load {e.company}
+    <>
+      <section className="sr-only" aria-label="Experience">
+        {experience.map((e, i) => (
+          <button key={e.company} type="button" aria-pressed={disc === i} onClick={() => setState({ disc: i })}>
+            Load {e.company}
+          </button>
+        ))}
+        <p aria-live="polite">
+          {current ? `${current.role} at ${current.company}, ${current.dates}. ${current.bullets.join(' ')}` : ''}
+        </p>
+      </section>
+      {/* Phones only (see CSS): the TV close-up leaves the console's eject button off-screen. */}
+      {current && (
+        <button type="button" className="eject-button" onClick={() => setState({ disc: null })}>
+          <FiSquare /> Eject
         </button>
-      ))}
-      <p aria-live="polite">
-        {current ? `${current.role} at ${current.company}, ${current.dates}. ${current.bullets.join(' ')}` : ''}
-      </p>
-    </section>
+      )}
+    </>
   );
 }
 
 function ProjectsPanel() {
   const page = useStore((s) => s.page);
   const project = page > 0 ? projects[page - 1] : null;
+  // The book itself says to tap a page, so this panel is for screen readers only.
   return (
-    <section className="panel panel-row">
-      <button
-        type="button"
-        className="round-button"
-        aria-label="Previous page"
-        disabled={page === 0}
-        onClick={() => setState({ page: page - 1 })}
-      >
-        <FiChevronLeft />
+    <section className="sr-only" aria-label="Projects">
+      <button type="button" disabled={page === 0} onClick={() => setState({ page: page - 1 })}>
+        Previous page
       </button>
-      <div className="panel-row-text">
-        <p className="eyebrow">Projects · {page === 0 ? 'Contents' : `Recipe ${page} of ${projects.length}`}</p>
-        <h2>{project ? project.title : 'The cookbook'}</h2>
-        <p className="sr-only" aria-live="polite">
-          {project ? `${project.title}. ${project.kind}. Built with ${project.stack.join(', ')}. ${project.steps.join(' ')}` : ''}
-        </p>
-      </div>
-      <button
-        type="button"
-        className="round-button"
-        aria-label="Next page"
-        disabled={page === SPREADS - 1}
-        onClick={() => setState({ page: page + 1 })}
-      >
-        <FiChevronRight />
+      <p aria-live="polite">
+        {project
+          ? `Recipe ${page} of ${projects.length}: ${project.title}. ${project.kind}. Built with ${project.stack.join(', ')}. ${project.steps.join(' ')}`
+          : 'The cookbook: contents'}
+      </p>
+      <button type="button" disabled={page === SPREADS - 1} onClick={() => setState({ page: page + 1 })}>
+        Next page
       </button>
     </section>
   );
@@ -227,8 +221,26 @@ const STATUS_TEXT: Record<PlayerStatus, string> = {
   playing: 'Now playing',
   paused: 'Paused',
   ended: 'Preview over',
-  unavailable: 'Not on Apple Music · no preview',
+  unavailable: 'No preview available',
 };
+
+/** Reserves room in the card and keeps the YouTube player laid over it. */
+function YoutubeSlot() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let frame = 0;
+    const follow = () => {
+      if (ref.current) placeYoutube(ref.current.getBoundingClientRect());
+      frame = requestAnimationFrame(follow);
+    };
+    follow();
+    return () => {
+      cancelAnimationFrame(frame);
+      placeYoutube(null);
+    };
+  }, []);
+  return <div ref={ref} className="yt-slot" />;
+}
 
 function InterestsPanel() {
   const album = useStore((s) => s.album);
@@ -280,11 +292,12 @@ function InterestsPanel() {
         <button type="button" className="round-button" aria-label="Stop" onClick={ejectRecord}>
           <FiSquare />
         </button>
-        <VolumeControl />
+        {canSetVolume() && <VolumeControl />}
       </div>
+      {current.youtube && track && status !== 'unavailable' && <YoutubeSlot />}
       {track?.storeUrl && (
         <a className="np-credit" href={track.storeUrl} target="_blank" rel="noopener noreferrer">
-          Preview courtesy of Apple Music
+          {current.youtube ? 'Watch on YouTube' : 'Preview courtesy of Apple Music'}
         </a>
       )}
     </section>
@@ -362,6 +375,13 @@ function ResumeModal() {
           </div>
         </div>
         <iframe src={profile.resume} title="Noah Colbourne's résumé" className="resume-frame" />
+        {/* Phone browsers can't show a PDF inside a page, so they get it full screen instead (see CSS). */}
+        <div className="resume-mobile">
+          <p>Open the PDF to read it full screen.</p>
+          <a className="text-button" href={profile.resume} target="_blank" rel="noopener noreferrer">
+            Open résumé <FiChevronRight />
+          </a>
+        </div>
       </div>
     </div>
   );

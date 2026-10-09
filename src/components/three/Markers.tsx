@@ -7,7 +7,7 @@ const MARKERS: { zone: Zone; label: string; position: [number, number, number] }
   // Each dot sits on the object it opens, so none float in empty air.
   { zone: 'experience', label: 'Experience', position: [-2.05, 1.94, -2.0] },
   { zone: 'projects', label: 'Projects', position: [-4.5, 1.0, -0.33] },
-  { zone: 'interests', label: 'Interests', position: [3.6, 1.05, -2.15] },
+  { zone: 'interests', label: 'Interests', position: [3.6, 1.05, -2.15] }, // on the turntable
   { zone: 'about', label: 'About', position: [1.2, 2.76, -2.72] },
   { zone: 'resume', label: 'Résumé', position: [0.7, 1.17, -2.5] },
 ];
