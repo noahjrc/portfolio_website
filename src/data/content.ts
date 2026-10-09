@@ -62,7 +62,7 @@ export const experience: Experience[] = [
     year: '2025–26',
     logo: '/SiftMed.png',
     color: '#2ec4b6',
-    skills: ['TypeScript', 'NestJS', 'React', 'AWS', 'EventBridge', 'CloudWatch', 'REST', 'GraphQL', 'Salesforce', 'Docker', 'CircleCI'],
+    skills: ['TypeScript', 'NestJS', 'React', 'AWS', 'EventBridge', 'CloudWatch', 'REST', 'GraphQL', 'Salesforce', 'Docker', 'CircleCI', 'Claude Code'],
     bullets: [
       'Developed an evaluation tool for the company’s GenAI features, gating releases against hundreds of test questions to catch quality regressions before they reach customers',
       'Root-caused critical bugs in the OCR and AI pipelines through on-call production support',
