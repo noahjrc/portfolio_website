@@ -155,5 +155,6 @@ export const albums: Album[] = [
   { title: 'Disintegration', artist: 'The Cure', coverImage: '/disintegration.webp', appleId: 372100016, track: 'Pictures of You' },
   { title: 'Things Fall Apart', artist: 'The Roots', coverImage: '/things_fall_apart.webp', appleId: 1479929235, track: 'You Got Me' },
   { title: 'Ignorance', artist: 'The Weather Station', coverImage: '/ignorance.webp', appleId: 1524055739, track: 'Separated' },
+  { title: 'U', artist: 'underscores', coverImage: '/u.jpg', appleId: 1878382378, track: 'Lovefield' },
   { title: 'Titanic Rising', artist: 'Weyes Blood', coverImage: '/titanic_rising.webp', appleId: 1450550344, track: 'Mirror Forever' },
 ];
