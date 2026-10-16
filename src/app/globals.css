@@ -682,7 +682,7 @@ kbd {
   height: 12px;
   border-radius: 50%;
   background: var(--cream);
-  box-shadow: 0 0 0 4px rgba(243, 234, 216, 0.25), 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 2px rgba(30, 22, 16, 0.8), 0 0 0 6px rgba(243, 234, 216, 0.3), 0 2px 8px rgba(0, 0, 0, 0.5);
   animation: pulse 2.6s var(--ease) infinite;
   animation-delay: inherit;
 }
@@ -824,10 +824,10 @@ kbd {
 @keyframes pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 4px rgba(243, 234, 216, 0.25), 0 2px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 2px rgba(30, 22, 16, 0.8), 0 0 0 6px rgba(243, 234, 216, 0.3), 0 2px 8px rgba(0, 0, 0, 0.5);
   }
   50% {
-    box-shadow: 0 0 0 9px rgba(243, 234, 216, 0), 0 2px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 2px rgba(30, 22, 16, 0.8), 0 0 0 11px rgba(243, 234, 216, 0), 0 2px 8px rgba(0, 0, 0, 0.5);
   }
 }
 @keyframes slide {

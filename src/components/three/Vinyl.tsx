@@ -26,7 +26,7 @@ const ARM_PIVOT = new THREE.Vector3(TT.x + 0.36, PLINTH_TOP + 0.07, TT.z - 0.3);
 const ARM_PLAYING = -0.5;
 const RPM_33 = (33.33 / 60) * Math.PI * 2;
 
-const PER_ROW = 10;
+const PER_ROW = 11;
 const GAP = 0.235;
 const SLEEVE = 0.22;
 const ROW0 = 1.45;

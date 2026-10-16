@@ -139,6 +139,7 @@ export const albums: Album[] = [
   { title: 'Lift Yr. Skinny Fists Like Antennas to Heaven!', artist: 'Godspeed You Black Emperor!', coverImage: '/lift_yr_skinny.webp', track: 'Storm', youtube: '5eZ_TgE3x_A' },
   { title: 'From Mars to Sirius', artist: 'Gojira', coverImage: '/from_mars_to_sirius.webp', appleId: 213374112, track: 'Where Dragons Dwell' },
   { title: 'By the Time I Get to Phoenix', artist: 'Injury Reserve', coverImage: '/by_the_time_i_get_to_phoenix.webp', appleId: 1578980409, track: 'Superman That' },
+  { title: '♡', artist: 'Jane Remover', coverImage: '/heart.jpg', appleId: 1856018518, track: 'Music Baby' },
   { title: 'Grace', artist: 'Jeff Buckley', coverImage: '/grace.webp', appleId: 1046187510, track: 'Dream Brother' },
   { title: 'Veteran', artist: 'JPEGMAFIA', coverImage: '/veteran.webp', appleId: 1818406054, track: 'Rainbow Six' },
   { title: 'To Pimp a Butterfly', artist: 'Kendrick Lamar', coverImage: '/to_pimp_a_butterfly.webp', appleId: 1440871877, track: "Wesley's Theory" },
