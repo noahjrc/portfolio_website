@@ -47,7 +47,7 @@ export default function Hud() {
       <header className="topbar">
         <button type="button" className="wordmark" onClick={() => setView('overview')}>
           <span className="wordmark-name">Noah Colbourne</span>
-          <span className="wordmark-sub">Computer Engineering</span>
+          <span className="wordmark-sub">Computer Engineer</span>
         </button>
         <nav className="nav" aria-label="Sections">
           {NAV.map((n) => (
