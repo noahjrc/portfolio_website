@@ -39,6 +39,11 @@ export default function PlainContent() {
               {p.title} ({p.kind})
             </h3>
             <p>Skills: {p.stack.join(', ')}</p>
+            {p.link && (
+              <p>
+                <a href={p.link}>{p.link.replace(/^https?:\/\//, '')}</a>
+              </p>
+            )}
             <ul>
               {p.steps.map((s) => (
                 <li key={s}>{s}</li>

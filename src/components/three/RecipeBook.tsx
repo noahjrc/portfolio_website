@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import * as THREE from 'three';
+import { projects } from '@/data/content';
 import { ctxOf, ensureFonts, makeCanvasTexture } from '@/lib/canvas';
 import { getState, setState, useStore } from '@/lib/store';
 import { roomTheme } from '@/lib/themes';
 import { COUNTER_TOP } from './Kitchen';
 import { RBox, mats as sharedMaterials } from './materials';
-import { SPREADS, drawPage } from './pages';
+import { SPREADS, drawPage, linkBoxes } from './pages';
 import { useInteractive } from './useInteractive';
 
 const PAGE_W = 0.62;
@@ -89,6 +90,19 @@ function usePageTextures() {
 const nextPage = () => setState({ page: Math.min(SPREADS - 1, getState().page + 1) });
 const prevPage = () => setState({ page: Math.max(0, getState().page - 1) });
 
+const NEXT_LABEL = 'Next page →';
+
+/** The open project's link, if this point on the right page (a texture uv) is over it. */
+function linkAt(uv: THREE.Vector2 | undefined) {
+  const { page, view } = getState();
+  const box = linkBoxes.get(page);
+  const link = page > 0 ? projects[page - 1].link : undefined;
+  if (view !== 'projects' || !uv || !box || !link) return null;
+  const x = uv.x * PX_W;
+  const y = (1 - uv.y) * PX_H;
+  return x >= box.x0 && x <= box.x1 && y >= box.y0 && y <= box.y1 ? link : null;
+}
+
 export function RecipeBook() {
   const textures = usePageTextures();
   const page = useStore((s) => s.page);
@@ -98,8 +112,22 @@ export function RecipeBook() {
   const pivot = useRef<THREE.Group>(null!);
   const mats = useMemo(() => ({ left: makePageMaterial(), right: makePageMaterial(), flip: makePageMaterial() }), []);
 
-  const right = useInteractive('projects', 'Next page →', nextPage);
+  const right = useInteractive('projects', NEXT_LABEL, nextPage);
   const left = useInteractive('projects', '← Previous page', prevPage);
+  // The right page also carries the project's link, which opens instead of turning the page.
+  const rightHandlers = {
+    ...right.handlers,
+    onPointerMove(e: ThreeEvent<PointerEvent>) {
+      if (getState().view !== 'projects') return;
+      setState({ hovered: linkAt(e.uv) ? 'Open on GitHub ↗' : NEXT_LABEL });
+    },
+    onClick(e: ThreeEvent<MouseEvent>) {
+      const link = linkAt(e.uv);
+      if (!link) return right.handlers.onClick(e);
+      e.stopPropagation();
+      window.open(link, '_blank', 'noopener,noreferrer');
+    },
+  };
   const cover = useInteractive('projects');
 
   // Turn one page at a time toward the requested spread.
@@ -159,7 +187,7 @@ export function RecipeBook() {
         </mesh>
       ))}
       <mesh geometry={pageGeometry} material={mats.left} position={[-PAGE_W, 0.061, 0]} {...left.handlers} />
-      <mesh geometry={pageGeometry} material={mats.right} position={[0, 0.061, 0]} {...right.handlers} />
+      <mesh geometry={pageGeometry} material={mats.right} position={[0, 0.061, 0]} {...rightHandlers} />
       <group ref={pivot} position={[0, 0.063, 0]}>
         <mesh geometry={pageGeometry} material={mats.flip} />
       </group>

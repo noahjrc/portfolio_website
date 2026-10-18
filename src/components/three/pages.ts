@@ -16,6 +16,9 @@ const hand = (size: number, weight = 400) => `${weight} ${size}px ${FONTS.hand}`
 const spaced = (s: string) => s.split('').join(' ');
 const pad = (n: number) => String(n).padStart(2, '0');
 
+/** Where each spread's project link was drawn on its right (method) page, in canvas pixels, for hit-testing clicks. */
+export const linkBoxes = new Map<number, { x0: number; y0: number; x1: number; y1: number }>();
+
 export async function drawPage(ctx: CanvasRenderingContext2D, w: number, h: number, index: number) {
   const left = index % 2 === 0;
   const spread = Math.floor(index / 2);
@@ -28,7 +31,7 @@ export async function drawPage(ctx: CanvasRenderingContext2D, w: number, h: numb
     else contentsPage(ctx, w, h);
   } else {
     const project = projects[spread - 1];
-    if (left) await ingredientsPage(ctx, w, project, spread);
+    if (left) await ingredientsPage(ctx, w, h, project, spread);
     else methodPage(ctx, w, h, project, spread);
   }
   ctx.restore();
@@ -187,7 +190,7 @@ function contentsPage(ctx: CanvasRenderingContext2D, w: number, h: number) {
   ctx.restore();
 }
 
-async function ingredientsPage(ctx: CanvasRenderingContext2D, w: number, project: Project, spread: number) {
+async function ingredientsPage(ctx: CanvasRenderingContext2D, w: number, h: number, project: Project, spread: number) {
   let y = 120;
   ctx.fillStyle = RED;
   ctx.font = serif(24, 600);
@@ -205,11 +208,23 @@ async function ingredientsPage(ctx: CanvasRenderingContext2D, w: number, project
   ctx.fillText(project.kind, M, y - 12);
   y += 30;
 
-  // Taped-in photo
-  const pw = w - 2 * M - 20;
-  const ph = 300;
+  // Taped-in photo, shaped to the image so it isn't cropped. It gets whatever height the
+  // ingredients leave free above the page number; a landscape photo too tall for that
+  // narrows instead, and a portrait one is cropped.
+  const cols = project.stack.length > 3 ? 2 : 1;
+  const rows = Math.ceil(project.stack.length / cols);
+  const below = 64 + 70 + (rows - 1) * 58;
+  const maxH = Math.min(340, h - 96 - below - y);
+  const img = await loadImage(project.image).catch(() => null);
+  let pw = w - 2 * M - 20;
+  let ph = 300;
+  if (img) {
+    const aspect = img.width / img.height;
+    ph = Math.max(240, Math.min(maxH, Math.round((pw - 28) / aspect) + 28));
+    if (aspect > 1) pw = Math.min(pw, Math.round((ph - 28) * aspect) + 28);
+  }
   ctx.save();
-  ctx.translate(M + 10 + pw / 2, y + ph / 2);
+  ctx.translate(w / 2, y + ph / 2);
   ctx.rotate(-0.025);
   ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
   ctx.shadowBlur = 18;
@@ -217,9 +232,9 @@ async function ingredientsPage(ctx: CanvasRenderingContext2D, w: number, project
   ctx.fillStyle = '#fff';
   ctx.fillRect(-pw / 2, -ph / 2, pw, ph);
   ctx.shadowColor = 'transparent';
-  try {
-    drawCover(ctx, await loadImage(project.image), -pw / 2 + 14, -ph / 2 + 14, pw - 28, ph - 28);
-  } catch {
+  if (img) {
+    drawCover(ctx, img, -pw / 2 + 14, -ph / 2 + 14, pw - 28, ph - 28);
+  } else {
     ctx.fillStyle = '#ddd5c4';
     ctx.fillRect(-pw / 2 + 14, -ph / 2 + 14, pw - 28, ph - 28);
   }
@@ -232,16 +247,14 @@ async function ingredientsPage(ctx: CanvasRenderingContext2D, w: number, project
     ctx.restore();
   }
   ctx.restore();
-  y += ph + 80;
+  y += ph + 64;
 
   ctx.fillStyle = INK;
   ctx.font = serif(46, 800);
   ctx.fillText('Ingredients', M, y);
   underline(ctx, M, y + 20, 250);
-  y += 80;
+  y += 70;
 
-  const cols = project.stack.length > 3 ? 2 : 1;
-  const rows = Math.ceil(project.stack.length / cols);
   const colW = (w - 2 * M) / cols;
   ctx.font = hand(48, 600);
   project.stack.forEach((item, i) => {
@@ -267,9 +280,16 @@ function methodPage(ctx: CanvasRenderingContext2D, w: number, h: number, project
   ctx.fillText(`Course: ${project.kind}`, M, y);
   y += 70;
 
-  // One numbered step per résumé bullet; longer recipes get a slightly smaller type size.
-  const size = project.steps.length > 1 ? 28 : 36;
-  const lead = Math.round(size * 1.42);
+  // One numbered step per résumé bullet; longer recipes get a slightly smaller type size,
+  // and smaller still if that's what it takes to fit the link above "next recipe".
+  const leadOf = (n: number) => Math.round(n * 1.42);
+  const stepsHeight = (n: number) => {
+    ctx.font = serif(n);
+    return project.steps.reduce((sum, step) => sum + wrapLines(ctx, step, w - 2 * M - 66).length * leadOf(n) + 22, 0);
+  };
+  const room = h - 120 - 50 - (project.link ? 64 : 0) - y;
+  const size = project.steps.length > 1 ? ([28, 26, 24].find((n) => stepsHeight(n) <= room) ?? 24) : 36;
+  const lead = leadOf(size);
   project.steps.forEach((step, i) => {
     ctx.fillStyle = RED;
     ctx.beginPath();
@@ -289,6 +309,23 @@ function methodPage(ctx: CanvasRenderingContext2D, w: number, h: number, project
     }
     y += 22;
   });
+
+  if (project.link) {
+    y += 30;
+    ctx.fillStyle = MUTED;
+    ctx.font = serif(28, 400, true);
+    const label = 'Serve at: ';
+    const lx = M + ctx.measureText(label).width;
+    ctx.fillText(label, M, y);
+    const text = `${project.link.replace(/^https?:\/\//, '')} ↗`;
+    ctx.fillStyle = RED;
+    ctx.font = serif(28, 600, true);
+    const tw = ctx.measureText(text).width;
+    ctx.fillText(text, lx, y);
+    ctx.fillRect(lx, y + 8, tw, 2);
+    linkBoxes.set(spread, { x0: lx - 12, y0: y - 38, x1: lx + tw + 12, y1: y + 20 });
+    y += 40;
+  }
 
   // The stamp only goes on when the method leaves room for it.
   if (y < h - 430) stamp(ctx, w - 200, h - 300);

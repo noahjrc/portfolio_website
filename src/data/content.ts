@@ -19,6 +19,8 @@ export interface Project {
   /** One line per bullet; each becomes a numbered step in the cookbook's method. */
   steps: string[];
   image: string;
+  /** Where to see it (repo or live site); shown as a link while its page is open. */
+  link?: string;
 }
 
 export interface Album {
@@ -105,15 +107,6 @@ export const experience: Experience[] = [
 
 export const projects: Project[] = [
   {
-    title: 'TripTailor',
-    kind: 'Web App',
-    stack: ['Go', 'React', 'PostgreSQL', 'OAuth2', 'Docker'],
-    steps: [
-      'Developed a microservices-based platform for sharing and exploring travel itineraries, enhancing trip planning efficiency.',
-    ],
-    image: '/Trip_Tailor.png',
-  },
-  {
     title: 'earworm',
     kind: 'Music Rating Mobile App',
     stack: ['Dart', 'Flutter', 'Google Cloud Platform', 'Firestore', 'MusicBrainz'],
@@ -123,6 +116,27 @@ export const projects: Project[] = [
       'Architected a self-hosted MusicBrainz replication pipeline on Google Compute Engine, syncing album and artist metadata to power in-app search.',
     ],
     image: '/earworm.png',
+  },
+  {
+    title: 'Orbit',
+    kind: 'Xbox 360 Homebrew Launcher',
+    stack: ['C++', 'HLSL', 'Direct3D 9', 'XAudio2', 'Xbox 360 SDK'],
+    steps: [
+      'Built a homebrew dashboard for modded Xbox 360 consoles that puts original Xbox, Xbox 360 and Arcade games and apps on 3D cover-flow shelves around a glowing orb.',
+      'Wrote a content scanner that sorts games and apps onto the right shelf by what they are, plus a file manager for copying, pasting and deleting across internal and USB drives.',
+      'Rendered the 3D interface with custom HLSL shaders and synthesised the menu sounds in code with XAudio2, with five selectable colour themes.',
+    ],
+    image: '/orbit.jpg',
+    link: 'https://github.com/noahjrc/Orbit',
+  },
+  {
+    title: 'TripTailor',
+    kind: 'Web App',
+    stack: ['Go', 'React', 'PostgreSQL', 'OAuth2', 'Docker'],
+    steps: [
+      'Developed a microservices-based platform for sharing and exploring travel itineraries, enhancing trip planning efficiency.',
+    ],
+    image: '/Trip_Tailor.png',
   },
 ];
 

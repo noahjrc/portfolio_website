@@ -208,6 +208,11 @@ function ProjectsPanel() {
           ? `Recipe ${page} of ${projects.length}: ${project.title}. ${project.kind}. Built with ${project.stack.join(', ')}. ${project.steps.join(' ')}`
           : 'The cookbook: contents'}
       </p>
+      {project?.link && (
+        <a href={project.link} target="_blank" rel="noopener noreferrer">
+          View {project.title} on GitHub
+        </a>
+      )}
       <button type="button" disabled={page === SPREADS - 1} onClick={() => setState({ page: page + 1 })}>
         Next page
       </button>
