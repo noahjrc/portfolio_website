@@ -47,7 +47,7 @@ export const profile = {
   handle: 'noahjrc',
   education: 'Bachelor of Engineering (Computer Engineering Co-op Program), Memorial University of Newfoundland and Labrador. Graduated May 2026.',
   bio: 'I’m a Computer Engineering graduate from Memorial University of Newfoundland and Labrador (Co-op, May 2026) and a full-stack developer. At SiftMed I built GenAI evaluation tooling, AWS event pipelines and customer-facing APIs; before that I worked in data and digitalization at Cenovus Energy and on robotics software with Paradigm. On my own time I built earworm, a music-rating app that 120 beta testers used to review over 500 albums. Outside of tech I keep a large vinyl collection (some favourites are on the shelf), cook a lot of Italian food, stay active, and play video games, including retro FPGA gaming.',
-  email: 'noahcolbourne2002@gmail.com',
+  email: 'noahjrcdev@gmail.com',
   github: 'https://github.com/noahjrc',
   linkedin: 'https://www.linkedin.com/in/noah-colbourne/',
   resume: '/Noah_Colbourne_Resume.pdf',
