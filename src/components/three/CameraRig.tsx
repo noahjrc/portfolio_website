@@ -69,6 +69,18 @@ export function CameraRig() {
     camera.position.lerp(goalPos, k);
     look.lerp(goalLook, k);
     camera.lookAt(look);
+
+    // Depth precision follows near/far, so scale them with how far back the camera is.
+    // A narrow window pulls the overview back ~30 m; with near fixed at 0.1 the wall
+    // frames would z-fight through the photos sitting a millimetre in front of them.
+    const reach = camera.position.distanceTo(look);
+    const near = THREE.MathUtils.clamp(reach * 0.05, 0.1, 3);
+    const far = Math.max(80, reach + 40);
+    if (Math.abs(camera.near - near) > near * 0.02 || camera.far !== far) {
+      camera.near = near;
+      camera.far = far;
+      camera.updateProjectionMatrix();
+    }
   });
 
   return null;

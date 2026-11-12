@@ -40,11 +40,11 @@ function Portrait() {
   return (
     <group ref={ref} position={PORTRAIT_POS} rotation-z={-0.03} {...handlers}>
       <RBox args={[0.95, 1.15, 0.05]} material={mats().walnutDark} radius={0.012} />
-      <mesh position-z={0.0255}>
+      <mesh position-z={0.027}>
         <planeGeometry args={[0.86, 1.06]} />
         <meshStandardMaterial color="#f4ecdc" roughness={0.9} />
       </mesh>
-      <mesh position-z={0.027}>
+      <mesh position-z={0.029}>
         <planeGeometry args={[0.74, 0.94]} />
         <meshStandardMaterial map={photo} roughness={0.8} />
       </mesh>

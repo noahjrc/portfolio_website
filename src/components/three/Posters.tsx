@@ -438,7 +438,7 @@ function PictureLight({ washMaterial }: { washMaterial: THREE.Material }) {
         <planeGeometry args={[POSTER_W * 0.66, 0.03]} />
         <meshBasicMaterial color="#fff1d0" toneMapped={false} side={THREE.DoubleSide} />
       </mesh>
-      <mesh position-z={0.018} material={washMaterial}>
+      <mesh position-z={0.02} material={washMaterial}>
         <planeGeometry args={[POSTER_W, POSTER_H]} />
       </mesh>
     </group>
@@ -452,7 +452,7 @@ function Poster({ draw, position, washMaterial }: { draw: Draw; position: [numbe
   return (
     <group position={position}>
       <RBox args={[POSTER_W + 0.05, POSTER_H + 0.05, 0.03]} material={m.walnutDark} radius={0.008} />
-      <mesh position-z={0.016} material={material}>
+      <mesh position-z={0.018} material={material}>
         <planeGeometry args={[POSTER_W, POSTER_H]} />
       </mesh>
       {washMaterial && <PictureLight washMaterial={washMaterial} />}
