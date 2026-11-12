@@ -253,7 +253,10 @@ export const crtFragment = /* glsl */ `
     float open = step(abs(uv.y - 0.5), uPower * 0.5 + 0.004);
     col = col * open + vec3(1.0) * open * (1.0 - uPower) * 0.6;
     col += vec3(0.05) * smoothstep(0.35, 0.0, length(vUv - vec2(0.28, 0.78)));
-    gl_FragColor = vec4(col, 1.0);
+    // Bloom's mip blur smears a single NaN pixel over the whole frame (a full-screen
+    // black flash), so never let one out of this shader.
+    if (any(isnan(col)) || any(isinf(col))) col = vec3(0.0);
+    gl_FragColor = vec4(clamp(col, 0.0, 4.0), 1.0);
     #include <colorspace_fragment>
   }
 `;
