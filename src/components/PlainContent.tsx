@@ -23,6 +23,16 @@ export default function PlainContent() {
               {e.location} · {e.dates}
             </p>
             <p>Skills: {e.skills.join(', ')}</p>
+            {e.links && (
+              <p>
+                {e.links.map((link, i) => (
+                  <span key={link.url}>
+                    {i > 0 && ' · '}
+                    <a href={link.url}>{link.label}</a>
+                  </span>
+                ))}
+              </p>
+            )}
             <ul>
               {e.bullets.map((b) => (
                 <li key={b}>{b}</li>
@@ -39,9 +49,14 @@ export default function PlainContent() {
               {p.title} ({p.kind})
             </h3>
             <p>Skills: {p.stack.join(', ')}</p>
-            {p.link && (
+            {p.links && p.links.length > 0 && (
               <p>
-                <a href={p.link}>{p.link.replace(/^https?:\/\//, '')}</a>
+                {p.links.map((link, i) => (
+                  <span key={link.url}>
+                    {i > 0 && ' · '}
+                    <a href={link.url}>{link.label}</a>
+                  </span>
+                ))}
               </p>
             )}
             <ul>

@@ -23,8 +23,12 @@ const TV_FRONT = TV.front;
 const SCREEN = { x: TV.x, y: TOP + 0.6, w: 1.0, h: 0.75 };
 const CONSOLE = { x: -4.05, z: -2.2, w: 0.8, h: 0.17, d: 0.55 };
 const SLOT = new THREE.Vector3(CONSOLE.x, TOP + 0.1, CONSOLE.z + CONSOLE.d / 2);
-const CASE = { w: 0.36, h: 0.46, d: 0.04, lean: -0.3, z: -2.3 };
-const caseX = (i: number) => -2.02 + i * 0.37;
+// Game cases stand in a row from beside the TV to the stand's right edge; with more
+// games than fit at full size (0.36 wide), they shrink to share the space.
+const CASE_ROW = { left: -2.2, right: -1.06, gap: 0.01 };
+const caseW = Math.min(0.36, (CASE_ROW.right - CASE_ROW.left - CASE_ROW.gap * (experience.length - 1)) / experience.length);
+const CASE = { w: caseW, h: caseW * (656 / 512), d: 0.04, lean: -0.3, z: -2.3 };
+const caseX = (i: number) => CASE_ROW.left + CASE.w / 2 + i * (CASE.w + CASE_ROW.gap);
 
 /** Insert progress per disc: 0 = in its case, 1 = fully inside the console. Shared with the CRT. */
 const discProgress = experience.map(() => 0);

@@ -184,6 +184,15 @@ function ExperiencePanel() {
           {current ? `${current.role} at ${current.company}, ${current.dates}. ${current.bullets.join(' ')}` : ''}
         </p>
       </section>
+      {current?.links && (
+        <nav className="disc-links" aria-label={`${current.company} links`}>
+          {current.links.map((link) => (
+            <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+              {link.label} ↗
+            </a>
+          ))}
+        </nav>
+      )}
       {/* Phones only (see CSS): the TV close-up leaves the console's eject button off-screen. */}
       {current && (
         <button type="button" className="eject-button" onClick={() => setState({ disc: null })}>
@@ -208,11 +217,11 @@ function ProjectsPanel() {
           ? `Recipe ${page} of ${projects.length}: ${project.title}. ${project.kind}. Built with ${project.stack.join(', ')}. ${project.steps.join(' ')}`
           : 'The cookbook: contents'}
       </p>
-      {project?.link && (
-        <a href={project.link} target="_blank" rel="noopener noreferrer">
-          View {project.title} on GitHub
+      {project?.links?.map((link) => (
+        <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+          View {project.title}: {link.label}
         </a>
-      )}
+      ))}
       <button type="button" disabled={page === SPREADS - 1} onClick={() => setState({ page: page + 1 })}>
         Next page
       </button>

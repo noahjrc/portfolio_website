@@ -10,6 +10,8 @@ export interface Experience {
   color: string;
   skills: string[];
   bullets: string[];
+  /** Shown as buttons while this game is loaded. */
+  links?: ProjectLink[];
 }
 
 export interface Project {
@@ -18,9 +20,16 @@ export interface Project {
   stack: string[];
   /** One line per bullet; each becomes a numbered step in the cookbook's method. */
   steps: string[];
-  image: string;
-  /** Where to see it (repo or live site); shown as a link while its page is open. */
-  link?: string;
+  /** Taped-in photo; without one the page gets a drawn placeholder. */
+  image?: string;
+  /** Where to see it (repo, live site, store listing); each is shown as a link while its page is open. */
+  links?: ProjectLink[];
+}
+
+export interface ProjectLink {
+  /** Short name, e.g. 'GitHub', 'Website', 'App Store'. */
+  label: string;
+  url: string;
 }
 
 export interface Album {
@@ -46,7 +55,7 @@ export const profile = {
   name: 'Noah Colbourne',
   handle: 'noahjrc',
   education: 'Bachelor of Engineering (Computer Engineering Co-op Program), Memorial University of Newfoundland and Labrador. Graduated May 2026.',
-  bio: 'I’m a Computer Engineering graduate from Memorial University of Newfoundland and Labrador (Co-op, May 2026) and a full-stack developer. At SiftMed I built GenAI evaluation tooling, AWS event pipelines and customer-facing APIs; before that I worked in data and digitalization at Cenovus Energy and on robotics software with Paradigm. On my own time I built earworm, a music-rating app that 120 beta testers used to review over 500 albums. Outside of tech I keep a large vinyl collection (some favourites are on the shelf), cook a lot of Italian food, stay active, and play video games, including retro FPGA gaming.',
+  bio: 'I’m a Computer Engineering graduate from Memorial University of Newfoundland and Labrador (Co-op, May 2026) and a full-stack developer. I co-founded earworm, a music-rating app now live on the App Store and the web, where listeners have posted over 1,000 album reviews since launch. At SiftMed I built GenAI evaluation tooling, AWS event pipelines and customer-facing APIs; before that I worked in data and digitalization at Cenovus Energy and on robotics software with Paradigm. I’m also building trakidex, a social app for tracking video game collections. Outside of tech I keep a large vinyl collection (some favourites are on the shelf), cook a lot of Italian food, stay active, and play video games, including retro FPGA gaming.',
   email: 'noahjrcdev@gmail.com',
   github: 'https://github.com/noahjrc',
   linkedin: 'https://www.linkedin.com/in/noah-colbourne/',
@@ -55,6 +64,27 @@ export const profile = {
 };
 
 export const experience: Experience[] = [
+  {
+    company: 'earworm',
+    short: 'EARWORM',
+    role: 'Co-Founder',
+    location: 'St. John’s, NL',
+    dates: 'Apr. 2026 – Present',
+    year: '2026–',
+    logo: '/earworm.png',
+    color: '#ff2d8a',
+    skills: ['React Native', 'Supabase', 'Flutter', 'Firestore', 'Google Cloud Platform', 'Deezer API'],
+    bullets: [
+      'Built the first version in Flutter on Google Cloud, with real-time messaging and push notifications on Firestore and Cloud Functions, plus a self-hosted MusicBrainz replication pipeline for album and artist data',
+      'Onboarded 120 beta testers who reviewed over 500 albums, and used their feedback to shape the product',
+      'Rebuilt the app in React Native on Supabase, and moved album and artist metadata to the Deezer API',
+      'Launched on the App Store and the web, and passed 1,000 album reviews since launch',
+    ],
+    links: [
+      { label: 'Website', url: 'https://app.earworm.reviews/' },
+      { label: 'App Store', url: 'https://apps.apple.com/us/app/earworm/id6820579757' },
+    ],
+  },
   {
     company: 'SiftMed',
     short: 'SIFTMED',
@@ -107,17 +137,6 @@ export const experience: Experience[] = [
 
 export const projects: Project[] = [
   {
-    title: 'earworm',
-    kind: 'Music Rating Mobile App',
-    stack: ['Dart', 'Flutter', 'Google Cloud Platform', 'Firestore', 'MusicBrainz'],
-    steps: [
-      'Shipped a music-focused mobile platform for album rating and real-time social interaction; onboarded 120 beta testers who reviewed over 500 albums.',
-      'Engineered real-time messaging and push notifications on Firestore and Cloud Functions, powering social interaction between users.',
-      'Architected a self-hosted MusicBrainz replication pipeline on Google Compute Engine, syncing album and artist metadata to power in-app search.',
-    ],
-    image: '/earworm.png',
-  },
-  {
     title: 'Orbit',
     kind: 'Xbox 360 Homebrew Launcher',
     stack: ['C++', 'HLSL', 'Direct3D 9', 'XAudio2', 'Xbox 360 SDK'],
@@ -127,16 +146,17 @@ export const projects: Project[] = [
       'Rendered the 3D interface with custom HLSL shaders and synthesised the menu sounds in code with XAudio2, with five selectable colour themes.',
     ],
     image: '/orbit.jpg',
-    link: 'https://github.com/noahjrc/Orbit',
+    links: [{ label: 'GitHub', url: 'https://github.com/noahjrc/Orbit' }],
   },
   {
-    title: 'TripTailor',
-    kind: 'Web App',
-    stack: ['Go', 'React', 'PostgreSQL', 'OAuth2', 'Docker'],
+    title: 'trakidex',
+    kind: 'Social Video Game Tracker',
+    stack: ['React Native', 'Expo', 'TypeScript', 'Supabase', 'PostgreSQL', 'Deno'],
     steps: [
-      'Developed a microservices-based platform for sharing and exploring travel itineraries, enhancing trip planning efficiency.',
+      'Built a full-stack Android app for tracking video game collections, reviews and per-session progress notes, with friends, an activity feed and push notifications.',
+      'Secured user data with PostgreSQL row-level security, so session notes stay private to their owner, backed by 400+ automated tests (pgTAP and Vitest).',
+      'Built offline-first caching, Edge Functions (IGDB API, Expo push, Resend email) and Sentry crash reporting.',
     ],
-    image: '/Trip_Tailor.png',
   },
 ];
 

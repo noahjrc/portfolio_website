@@ -92,15 +92,14 @@ const prevPage = () => setState({ page: Math.max(0, getState().page - 1) });
 
 const NEXT_LABEL = 'Next page →';
 
-/** The open project's link, if this point on the right page (a texture uv) is over it. */
+/** The open project's link, if this point on the right page (a texture uv) is over one. */
 function linkAt(uv: THREE.Vector2 | undefined) {
   const { page, view } = getState();
-  const box = linkBoxes.get(page);
-  const link = page > 0 ? projects[page - 1].link : undefined;
-  if (view !== 'projects' || !uv || !box || !link) return null;
+  const boxes = page > 0 && projects[page - 1].links?.length ? linkBoxes.get(page) : undefined;
+  if (view !== 'projects' || !uv || !boxes) return null;
   const x = uv.x * PX_W;
   const y = (1 - uv.y) * PX_H;
-  return x >= box.x0 && x <= box.x1 && y >= box.y0 && y <= box.y1 ? link : null;
+  return boxes.find((b) => x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) ?? null;
 }
 
 export function RecipeBook() {
@@ -119,13 +118,14 @@ export function RecipeBook() {
     ...right.handlers,
     onPointerMove(e: ThreeEvent<PointerEvent>) {
       if (getState().view !== 'projects') return;
-      setState({ hovered: linkAt(e.uv) ? 'Open on GitHub ↗' : NEXT_LABEL });
+      const link = linkAt(e.uv);
+      setState({ hovered: link ? `Open ${link.label} ↗` : NEXT_LABEL });
     },
     onClick(e: ThreeEvent<MouseEvent>) {
       const link = linkAt(e.uv);
       if (!link) return right.handlers.onClick(e);
       e.stopPropagation();
-      window.open(link, '_blank', 'noopener,noreferrer');
+      window.open(link.url, '_blank', 'noopener,noreferrer');
     },
   };
   const cover = useInteractive('projects');

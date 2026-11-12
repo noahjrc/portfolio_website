@@ -17,7 +17,7 @@ const spaced = (s: string) => s.split('').join(' ');
 const pad = (n: number) => String(n).padStart(2, '0');
 
 /** Where each spread's project link was drawn on its right (method) page, in canvas pixels, for hit-testing clicks. */
-export const linkBoxes = new Map<number, { x0: number; y0: number; x1: number; y1: number }>();
+export const linkBoxes = new Map<number, { x0: number; y0: number; x1: number; y1: number; url: string; label: string }[]>();
 
 export async function drawPage(ctx: CanvasRenderingContext2D, w: number, h: number, index: number) {
   const left = index % 2 === 0;
@@ -215,7 +215,7 @@ async function ingredientsPage(ctx: CanvasRenderingContext2D, w: number, h: numb
   const rows = Math.ceil(project.stack.length / cols);
   const below = 64 + 70 + (rows - 1) * 58;
   const maxH = Math.min(340, h - 96 - below - y);
-  const img = await loadImage(project.image).catch(() => null);
+  const img = project.image ? await loadImage(project.image).catch(() => null) : null;
   let pw = w - 2 * M - 20;
   let ph = 300;
   if (img) {
@@ -235,8 +235,17 @@ async function ingredientsPage(ctx: CanvasRenderingContext2D, w: number, h: numb
   if (img) {
     drawCover(ctx, img, -pw / 2 + 14, -ph / 2 + 14, pw - 28, ph - 28);
   } else {
-    ctx.fillStyle = '#ddd5c4';
+    // No photo yet: a dark card with the project's name on it.
+    ctx.fillStyle = '#211d33';
     ctx.fillRect(-pw / 2 + 14, -ph / 2 + 14, pw - 28, ph - 28);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fff';
+    fitFont(ctx, project.title, pw - 100, 84, 40, (s) => serif(s, 800));
+    ctx.fillText(project.title, 0, 10);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.font = hand(38);
+    ctx.fillText('photo coming soon', 0, 62);
+    ctx.textAlign = 'left';
   }
   ctx.fillStyle = 'rgba(255, 214, 102, 0.75)';
   for (const side of [-1, 1]) {
@@ -287,7 +296,8 @@ function methodPage(ctx: CanvasRenderingContext2D, w: number, h: number, project
     ctx.font = serif(n);
     return project.steps.reduce((sum, step) => sum + wrapLines(ctx, step, w - 2 * M - 66).length * leadOf(n) + 22, 0);
   };
-  const room = h - 120 - 50 - (project.link ? 64 : 0) - y;
+  const links = project.links ?? [];
+  const room = h - 120 - 50 - (links.length ? 64 : 0) - y;
   const size = project.steps.length > 1 ? ([28, 26, 24].find((n) => stepsHeight(n) <= room) ?? 24) : 36;
   const lead = leadOf(size);
   project.steps.forEach((step, i) => {
@@ -310,20 +320,32 @@ function methodPage(ctx: CanvasRenderingContext2D, w: number, h: number, project
     y += 22;
   });
 
-  if (project.link) {
+  if (links.length) {
     y += 30;
     ctx.fillStyle = MUTED;
     ctx.font = serif(28, 400, true);
     const label = 'Serve at: ';
-    const lx = M + ctx.measureText(label).width;
+    let lx = M + ctx.measureText(label).width;
     ctx.fillText(label, M, y);
-    const text = `${project.link.replace(/^https?:\/\//, '')} ↗`;
-    ctx.fillStyle = RED;
-    ctx.font = serif(28, 600, true);
-    const tw = ctx.measureText(text).width;
-    ctx.fillText(text, lx, y);
-    ctx.fillRect(lx, y + 8, tw, 2);
-    linkBoxes.set(spread, { x0: lx - 12, y0: y - 38, x1: lx + tw + 12, y1: y + 20 });
+    // Links sit on one line by name ("Website ↗ · App Store ↗") rather than as raw URLs.
+    const boxes = links.map((link, i) => {
+      if (i > 0) {
+        ctx.fillStyle = MUTED;
+        ctx.font = serif(28, 400, true);
+        ctx.fillText(' · ', lx, y);
+        lx += ctx.measureText(' · ').width;
+      }
+      const text = `${link.label} ↗`;
+      ctx.fillStyle = RED;
+      ctx.font = serif(28, 600, true);
+      const tw = ctx.measureText(text).width;
+      ctx.fillText(text, lx, y);
+      ctx.fillRect(lx, y + 8, tw, 2);
+      const box = { x0: lx - 8, y0: y - 38, x1: lx + tw + 8, y1: y + 20, url: link.url, label: link.label };
+      lx += tw;
+      return box;
+    });
+    linkBoxes.set(spread, boxes);
     y += 40;
   }
 

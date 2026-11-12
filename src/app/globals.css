@@ -669,6 +669,35 @@ kbd {
   animation: fade-in 0.4s var(--ease) both;
 }
 
+/* Links for the loaded game (e.g. earworm's website and App Store page). */
+.disc-links {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+  animation: fade-in 0.4s var(--ease) both;
+}
+.disc-links a {
+  padding: 12px 22px;
+  border: 1px solid var(--cream-faint);
+  border-radius: 999px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--cream);
+  text-decoration: none;
+}
+.disc-links a:hover {
+  border-color: var(--cream);
+}
+
 /* ─── Hotspots (rendered inside the 3D scene) ────────────────────────── */
 .hotspot {
   position: relative;
@@ -885,6 +914,9 @@ kbd {
   }
   .eject-button {
     display: inline-flex;
+  }
+  .disc-links {
+    bottom: 88px;
   }
   .resume-frame {
     display: none;
